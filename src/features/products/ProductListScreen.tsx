@@ -40,7 +40,7 @@ export default function ProductListScreen() {
     <View style={styles.container}>
       <FlatList
         data={products}
-        keyExtractor={(p) => p.id}
+        keyExtractor={(p) => p.id || ''}
         renderItem={({ item }) => (
           <View style={styles.item}>
             <Text style={styles.name}>{item.name}</Text>

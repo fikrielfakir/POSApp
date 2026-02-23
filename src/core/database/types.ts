@@ -1,4 +1,5 @@
 export interface Product {
+  [key: string]: any;
   id: string;
   name: string;
   sku: string | null;

@@ -21,7 +21,12 @@
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.CAMERA"
+      ],
+      "package": "com.fikrielfakir_dev.POSApp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -29,7 +34,6 @@
     "plugins": [
       "expo-sqlite",
       "expo-secure-store",
-      "expo-barcode-scanner",
       "expo-localization"
     ]
   }
