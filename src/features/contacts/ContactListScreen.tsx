@@ -12,13 +12,6 @@ export default function ContactListScreen() {
     loadContacts();
   }, [filterType]);
 
-  const loadContacts = () => {
-    const type = filterType === 'all' ? undefined : filterType;
-    const list = getAllContacts(type);
-    setContacts(list);
-  };
-
-  const filteredContacts = searchQuery
     ? contacts.filter(
         (c) =>
           c.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -27,9 +20,6 @@ export default function ContactListScreen() {
       )
     : contacts;
 
-  const renderContact = ({ item }: { item: Contact }) => (
-    <TouchableOpacity style={styles.contactCard}>
-      <View style={styles.avatar}>
         <Text style={styles.avatarText}>{item.name.charAt(0).toUpperCase()}</Text>
       </View>
       <View style={styles.contactInfo}>
@@ -68,14 +58,6 @@ export default function ContactListScreen() {
           </TouchableOpacity>
         ))}
       </View>
-      <FlatList
-        data={filteredContacts}
-        renderItem={renderContact}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={styles.list}
-        ListEmptyComponent={<Text style={styles.empty}>No contacts found</Text>}
-      />
-    </View>
   );
 }
 
@@ -167,9 +149,3 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.light.info + '20',
     color: Colors.light.info,
   },
-  empty: {
-    textAlign: 'center',
-    color: Colors.light.textMuted,
-    marginTop: Spacing.xl,
-  },
-});
