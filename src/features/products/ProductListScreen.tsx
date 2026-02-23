@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { Colors, Typography, Spacing } from '@shared/theme/theme';
 import { Product } from './types';
 import { getAllProducts } from './ProductListScreen.helper';
 
 // Lightweight product list screen as a starting point for Phase 6
 export default function ProductListScreen() {
+  const navigation = useNavigation<any>();
   const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState<Product[]>([]);
 
@@ -49,7 +51,7 @@ export default function ProductListScreen() {
         )}
         ListEmptyComponent={<Text style={styles.empty}>No products found</Text>}
       />
-      <TouchableOpacity style={styles.fab} onPress={() => {}}>
+      <TouchableOpacity style={styles.fab} onPress={() => navigation.navigate('ProductForm')}>
         <Text style={styles.fabText}>＋</Text>
       </TouchableOpacity>
     </View>
