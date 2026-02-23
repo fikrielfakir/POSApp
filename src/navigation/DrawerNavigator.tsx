@@ -4,11 +4,23 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { DrawerParamList, MainTabParamList } from './types';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { DrawerParamList, MainTabParamList, ProductStackParamList } from './types';
 import { Colors, Typography, Spacing } from '../shared/theme/theme';
 import ProductListScreen from '../features/products/ProductListScreen';
+import ProductFormScreen from '../features/products/ProductFormScreen';
 
 const Drawer = createDrawerNavigator<DrawerParamList>();
+const ProductStack = createNativeStackNavigator<ProductStackParamList>();
+
+function ProductStackNavigator() {
+  return (
+    <ProductStack.Navigator screenOptions={{ headerShown: false }}>
+      <ProductStack.Screen name="ProductList" component={ProductListScreen} />
+      <ProductStack.Screen name="ProductForm" component={ProductFormScreen} />
+    </ProductStack.Navigator>
+  );
+}
 const Tab = createBottomTabNavigator<MainTabParamList>();
 
 const C = Colors.light;
@@ -129,7 +141,7 @@ export function DrawerNavigator() {
       />
       <Drawer.Screen
         name="Products"
-        component={ProductListScreen}
+        component={ProductStackNavigator}
         options={{
           title: 'Products',
           drawerIcon: ({ color, size }) => <Ionicons name="cube" size={size} color={color} />,
