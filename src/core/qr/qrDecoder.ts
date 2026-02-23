@@ -33,7 +33,7 @@ export interface CompanyInfo {
 
 export interface QRPayload {
   v: number;
-  type: string;
+  type: 'pos_init' | 'pos_update' | 'pos_add_products' | 'pos_add_contacts' | 'pos_stock_transfer';
   chunk: ChunkMeta | null;
   company?: CompanyInfo;
   warehouses?: any[];
@@ -42,6 +42,19 @@ export interface QRPayload {
   products?: any[];
   contacts?: any[];
   tax_rules?: any[];
+  stock_transfers?: StockTransferPayload[];
+}
+
+export interface StockTransferPayload {
+  id: string;
+  from_warehouse: string;
+  to_warehouse: string;
+  items: Array<{
+    product_id: string;
+    product_name: string;
+    quantity: number;
+  }>;
+  notes?: string;
 }
 
 export function decodeQRString(raw: string): QRPayload {
@@ -66,7 +79,8 @@ export function decodeQRString(raw: string): QRPayload {
   }
 
   if (!payload || typeof payload !== 'object') throw new QRInvalidError();
-  if (payload.type !== 'pos_init') throw new QRInvalidError('QR code is not a POS setup code');
+  const validTypes = ['pos_init', 'pos_update', 'pos_add_products', 'pos_add_contacts', 'pos_stock_transfer'];
+  if (!validTypes.includes(payload.type)) throw new QRInvalidError('QR code is not a valid POS code');
   if (payload.v !== 1) throw new QRVersionError();
 
   return payload;
