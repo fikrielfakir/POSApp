@@ -73,13 +73,13 @@ export default function POSScreen() {
 
   const handleAddToCart = (product: Product) => {
     addItem({
-      productId: product.id!,
+      productId: product.id,
       name: product.name,
-      barcode: product.barcode,
+      barcode: product.barcode || undefined,
       quantity: 1,
-      unitPrice: product.price || 0,
+      unitPrice: product.sale_price || 0,
       discountPercent: 0,
-      taxPercent: 0,
+      taxPercent: product.tax_pct || 0,
     });
   };
 
