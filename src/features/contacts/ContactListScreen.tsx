@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { Colors, Typography, Spacing, BorderRadius } from '../../shared/theme/theme';
 import { getAllContacts, Contact } from './contactRepository';
 
 export default function ContactListScreen() {
+  const navigation = useNavigation<any>();
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [filterType, setFilterType] = useState<'all' | 'customer' | 'supplier'>('all');
@@ -12,15 +14,27 @@ export default function ContactListScreen() {
     loadContacts();
   }, [filterType]);
 
+  const loadContacts = async () => {
+    const list = await getAllContacts();
+    setContacts(list);
+  };
+
+  const filteredContacts = (searchQuery
     ? contacts.filter(
         (c) =>
           c.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
           c.phone?.includes(searchQuery) ||
           c.email?.toLowerCase().includes(searchQuery.toLowerCase())
       )
-    : contacts;
+    : contacts).filter(c => filterType === 'all' || c.contact_type === filterType);
 
-        <Text style={styles.avatarText}>{item.name.charAt(0).toUpperCase()}</Text>
+  const renderContact = ({ item }: { item: Contact }) => (
+    <TouchableOpacity 
+      style={styles.contactCard}
+      onPress={() => navigation.navigate('ContactDetail', { id: item.id })}
+    >
+      <View style={styles.avatar}>
+        <Text style={styles.avatarText}>{item.name ? item.name.charAt(0).toUpperCase() : '?'}</Text>
       </View>
       <View style={styles.contactInfo}>
         <Text style={styles.contactName}>{item.name}</Text>
@@ -58,6 +72,19 @@ export default function ContactListScreen() {
           </TouchableOpacity>
         ))}
       </View>
+      <FlatList
+        data={filteredContacts}
+        keyExtractor={(item) => item.id}
+        renderItem={renderContact}
+        contentContainerStyle={styles.list}
+      />
+      <TouchableOpacity 
+        style={styles.fab} 
+        onPress={() => navigation.navigate('ContactForm')}
+      >
+        <Text style={styles.fabText}>＋</Text>
+      </TouchableOpacity>
+    </View>
   );
 }
 
@@ -149,3 +176,21 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.light.info + '20',
     color: Colors.light.info,
   },
+  fab: {
+    position: 'absolute',
+    right: 20,
+    bottom: 20,
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: Colors.light.primary,
+    alignItems: 'center',
+    justifyContent: 'center',
+    elevation: 6,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.27,
+    shadowRadius: 4.65,
+  },
+  fabText: { color: '#fff', fontSize: 28, lineHeight: 28 },
+});

@@ -1,5 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { Colors, Typography, Spacing, BorderRadius } from '../../shared/theme/theme';
+import { getAllSales, Sale } from './saleRepository';
+
+export default function SaleListScreen() {
+  const navigation = useNavigation<any>();
+  const [sales, setSales] = useState<Sale[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  useEffect(() => {
+    loadSales();
+  }, []);
+
+  const loadSales = () => {
     const list = getAllSales();
     setSales(list);
   };
@@ -13,7 +27,10 @@ import { View, Text, FlatList, StyleSheet, TouchableOpacity, TextInput } from 'r
     : sales;
 
   const renderSale = ({ item }: { item: Sale }) => (
-    <TouchableOpacity style={styles.saleCard}>
+    <TouchableOpacity 
+      style={styles.saleCard}
+      onPress={() => navigation.navigate('Invoice', { id: item.id })}
+    >
       <View style={styles.saleHeader}>
         <Text style={styles.invoiceNo}>{item.invoice_number}</Text>
         <Text style={[styles.status, item.status === 'voided' && styles.statusVoided]}>
@@ -41,6 +58,20 @@ import { View, Text, FlatList, StyleSheet, TouchableOpacity, TextInput } from 'r
           onChangeText={setSearchQuery}
         />
       </View>
+      <FlatList
+        data={filteredSales}
+        keyExtractor={(item) => item.id}
+        renderItem={renderSale}
+        contentContainerStyle={styles.list}
+        ListEmptyComponent={<Text style={styles.empty}>No sales found</Text>}
+      />
+      <TouchableOpacity 
+        style={styles.fab} 
+        onPress={() => navigation.navigate('POS')}
+      >
+        <Text style={styles.fabText}>＋</Text>
+      </TouchableOpacity>
+    </View>
   );
 }
 
@@ -107,3 +138,27 @@ const styles = StyleSheet.create({
     fontSize: Typography.xs,
     color: Colors.light.textMuted,
   },
+  empty: {
+    textAlign: 'center',
+    color: Colors.light.textMuted,
+    marginTop: 40,
+    fontSize: Typography.md,
+  },
+  fab: {
+    position: 'absolute',
+    right: 20,
+    bottom: 20,
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: Colors.light.primary,
+    alignItems: 'center',
+    justifyContent: 'center',
+    elevation: 6,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.27,
+    shadowRadius: 4.65,
+  },
+  fabText: { color: '#fff', fontSize: 28, lineHeight: 28 },
+});
