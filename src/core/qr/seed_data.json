@@ -1,0 +1,129 @@
+{
+  "v": 1,
+  "type": "pos_init",
+  "company": {
+    "name": "My POS Company",
+    "address": "123 Main Street, City",
+    "phone": "+1234567890",
+    "email": "info@company.com",
+    "tax_number": "TAX123456",
+    "currency": "USD",
+    "currency_symbol": "$",
+    "tax_rate": 10,
+    "tax_name": "VAT",
+    "receipt_footer": "Thank you for your business!"
+  },
+  "warehouses": [
+    { "id": "WH001", "name": "Main Warehouse", "location": "Warehouse A", "is_default": 1 }
+  ],
+  "categories": [
+    { "id": "CAT001", "name": "Electronics", "color": "#2563eb", "icon": "cpu" },
+    { "id": "CAT002", "name": "Food & Beverages", "color": "#16a34a", "icon": "fast-food" },
+    { "id": "CAT003", "name": "Clothing", "color": "#db2777", "icon": "shirt" }
+  ],
+  "brands": [
+    { "id": "BR001", "name": "Apple" },
+    { "id": "BR002", "name": "Samsung" },
+    { "id": "BR003", "name": "Nike" }
+  ],
+  "products": [
+    {
+      "id": "PRD001",
+      "name": "iPhone 15",
+      "sku": "IP15-001",
+      "barcode": "1234567890123",
+      "category_id": "CAT001",
+      "brand_id": "BR001",
+      "unit": "pc",
+      "sale_price": 999.99,
+      "cost_price": 800.00,
+      "tax_pct": 10,
+      "reorder_level": 10,
+      "stock_qty": 50,
+      "description": "iPhone 15 128GB"
+    },
+    {
+      "id": "PRD002",
+      "name": "Galaxy S23",
+      "sku": "SAM-S23-001",
+      "barcode": "8806094777017",
+      "category_id": "CAT001",
+      "brand_id": "BR002",
+      "unit": "pc",
+      "sale_price": 799.99,
+      "cost_price": 650.00,
+      "tax_pct": 10,
+      "reorder_level": 5,
+      "stock_qty": 30,
+      "description": "Samsung Galaxy S23 256GB"
+    },
+    {
+      "id": "PRD003",
+      "name": "Air Max 270",
+      "sku": "NIKE-AM270-01",
+      "barcode": "191887234567",
+      "category_id": "CAT003",
+      "brand_id": "BR003",
+      "unit": "pair",
+      "sale_price": 150.00,
+      "cost_price": 90.00,
+      "tax_pct": 10,
+      "reorder_level": 10,
+      "stock_qty": 100,
+      "description": "Nike Air Max 270 Black/White"
+    },
+    {
+      "id": "PRD004",
+      "name": "Organic Coffee",
+      "sku": "COFFEE-001",
+      "barcode": "5012345678901",
+      "category_id": "CAT002",
+      "brand_id": "BR002",
+      "unit": "bag",
+      "sale_price": 12.99,
+      "cost_price": 7.00,
+      "tax_pct": 0,
+      "reorder_level": 20,
+      "stock_qty": 200,
+      "description": "Medium Roast Organic Coffee 500g"
+    }
+  ],
+  "contacts": [
+    {
+      "id": "CUST001",
+      "name": "John Doe",
+      "code": "C001",
+      "phone": "+1234567890",
+      "email": "john@example.com",
+      "address": "123 Customer St",
+      "contact_type": "customer",
+      "tax_number": "",
+      "opening_balance": 0,
+      "credit_limit": 1000
+    },
+    {
+      "id": "CUST002",
+      "name": "Jane Smith",
+      "code": "C002",
+      "phone": "+1987654321",
+      "email": "jane@example.com",
+      "address": "456 Avenue Rd",
+      "contact_type": "customer",
+      "tax_number": "",
+      "opening_balance": 50,
+      "credit_limit": 2000
+    },
+    {
+      "id": "SUP001",
+      "name": "Tech Supplies Inc",
+      "code": "S001",
+      "phone": "+1122334455",
+      "email": "sales@techsupplies.com",
+      "address": "789 Industry Blvd",
+      "contact_type": "supplier",
+      "tax_number": "TAX987654",
+      "opening_balance": 0,
+      "credit_limit": 5000
+    }
+  ]
+}
