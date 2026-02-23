@@ -1,17 +1,22 @@
 import React from 'react';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList, DrawerContentComponentProps } from '@react-navigation/drawer';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { DrawerParamList, MainTabParamList, ProductStackParamList } from './types';
+import { View, Text, StyleSheet } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { DrawerParamList, MainTabParamList, ProductStackParamList, SaleStackParamList } from './types';
 import { Colors, Typography, Spacing } from '../shared/theme/theme';
 import ProductListScreen from '../features/products/ProductListScreen';
 import ProductFormScreen from '../features/products/ProductFormScreen';
+import POSScreen from '../features/sales/POSScreen';
+import SaleListScreen from '../features/sales/SaleListScreen';
+import ContactListScreen from '../features/contacts/ContactListScreen';
+import { ContactFormScreen } from '../features/contacts/ContactFormScreen';
 
 const Drawer = createDrawerNavigator<DrawerParamList>();
 const ProductStack = createNativeStackNavigator<ProductStackParamList>();
+const SaleStack = createNativeStackNavigator<SaleStackParamList>();
+const ContactStack = createNativeStackNavigator();
 
 function ProductStackNavigator() {
   return (
@@ -21,6 +26,24 @@ function ProductStackNavigator() {
     </ProductStack.Navigator>
   );
 }
+
+function SaleStackNavigator() {
+  return (
+    <SaleStack.Navigator screenOptions={{ headerShown: false }}>
+      <SaleStack.Screen name="SaleList" component={SaleListScreen} />
+    </SaleStack.Navigator>
+  );
+}
+
+function ContactStackNavigator() {
+  return (
+    <ContactStack.Navigator screenOptions={{ headerShown: false }}>
+      <ContactStack.Screen name="ContactList" component={ContactListScreen} />
+      <ContactStack.Screen name="ContactForm" component={ContactFormScreen} />
+    </ContactStack.Navigator>
+  );
+}
+
 const Tab = createBottomTabNavigator<MainTabParamList>();
 
 const C = Colors.light;
@@ -67,10 +90,10 @@ function BottomTabs() {
         headerShown: false,
       })}
     >
-      <Tab.Screen name="POSTab" component={POSPlaceholder} options={{ tabBarLabel: 'POS' }} />
-      <Tab.Screen name="ProductsTab" component={ProductsPlaceholder} options={{ tabBarLabel: 'Products' }} />
-      <Tab.Screen name="SalesTab" component={SalesPlaceholder} options={{ tabBarLabel: 'Sales' }} />
-      <Tab.Screen name="ContactsTab" component={ContactsPlaceholder} options={{ tabBarLabel: 'Contacts' }} />
+      <Tab.Screen name="POSTab" component={POSScreen} options={{ tabBarLabel: 'POS' }} />
+      <Tab.Screen name="ProductsTab" component={ProductStackNavigator} options={{ tabBarLabel: 'Products' }} />
+      <Tab.Screen name="SalesTab" component={SaleStackNavigator} options={{ tabBarLabel: 'Sales' }} />
+      <Tab.Screen name="ContactsTab" component={ContactStackNavigator} options={{ tabBarLabel: 'Contacts' }} />
       <Tab.Screen name="MoreTab" component={MoreScreen} options={{ tabBarLabel: 'More' }} />
     </Tab.Navigator>
   );

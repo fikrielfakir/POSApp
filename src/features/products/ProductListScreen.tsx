@@ -1,34 +1,43 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, StyleSheet, ActivityIndicator, TouchableOpacity, Alert } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import React, { useEffect, useState, useCallback } from 'react';
+import { View, Text, FlatList, StyleSheet, ActivityIndicator, TouchableOpacity, Alert, RefreshControl } from 'react-native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import * as DocumentPicker from 'expo-document-picker';
-import * as FileSystem from 'expo-file-system';
 import { Colors, Typography, Spacing, BorderRadius } from '@shared/theme/theme';
-import { Product } from './types';
+import { Product } from '@core/database/types';
 import { getAllProducts } from './ProductListScreen.helper';
 import { createProduct } from './productRepository';
-import { v4 as uuidv4 } from 'uuid';
+import { customAlphabet } from 'nanoid/non-secure';
 
-// Lightweight product list screen as a starting point for Phase 6
+const nanoid = customAlphabet('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz', 10);
+
 export default function ProductListScreen() {
   const navigation = useNavigation<any>();
   const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState<Product[]>([]);
+  const [refreshing, setRefreshing] = useState(false);
 
-  const loadProducts = async () => {
+  const loadProducts = useCallback(() => {
     try {
-      const list = await getAllProducts();
+      const list = getAllProducts();
       setProducts(list);
     } catch {
-      // ignore fetch errors
+      // ignore
     } finally {
       setLoading(false);
     }
-  };
-
-  useEffect(() => {
-    loadProducts();
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      loadProducts();
+    }, [loadProducts])
+  );
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    loadProducts();
+    setRefreshing(false);
+  }, [loadProducts]);
 
   const handleImportJSON = async () => {
     try {
@@ -40,7 +49,10 @@ export default function ProductListScreen() {
       if (result.canceled) return;
 
       const fileUri = result.assets[0].uri;
-      const fileContent = await FileSystem.readAsStringAsync(fileUri);
+      
+      // Use fetch instead of deprecated FileSystem API
+      const response = await fetch(fileUri);
+      const fileContent = await response.text();
       const importedData = JSON.parse(fileContent);
 
       const productsToImport = Array.isArray(importedData) ? importedData : [importedData];
@@ -49,8 +61,8 @@ export default function ProductListScreen() {
       for (const p of productsToImport) {
         if (!p.name || !p.sale_price) continue;
         
-        await createProduct({
-          id: p.id || uuidv4(),
+        createProduct({
+          id: p.id || nanoid(),
           name: p.name,
           sku: p.sku || null,
           barcode: p.barcode || null,

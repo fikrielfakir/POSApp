@@ -1,3 +1,8 @@
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { Colors, Typography, Spacing, BorderRadius } from '../../shared/theme/theme';
+import { getSalesSummary } from '../sales/saleRepository';
 
 const { width } = Dimensions.get('window');
 
@@ -22,6 +27,8 @@ function StatCard({ title, value, icon, color }: StatCardProps) {
   );
 }
 
+export default function DashboardScreen() {
+  const [stats, setStats] = useState({
     totalSales: 0,
     totalRevenue: 0,
     totalTax: 0,
@@ -82,6 +89,11 @@ function StatCard({ title, value, icon, color }: StatCardProps) {
         />
       </View>
 
+      <Text style={styles.sectionTitle}>Quick Actions</Text>
+      <View style={styles.actionsGrid}>
+        {quickActions.map((action) => (
+          <TouchableOpacity key={action.title} style={styles.actionCard}>
+            <View style={[styles.actionIcon, { backgroundColor: action.color + '20' }]}>
               <Ionicons name={action.icon} size={28} color={action.color} />
             </View>
             <Text style={styles.actionTitle}>{action.title}</Text>
