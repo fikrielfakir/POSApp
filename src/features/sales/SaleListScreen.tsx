@@ -1,17 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
-import { Colors, Typography, Spacing, BorderRadius } from '../../shared/theme/theme';
-import { getAllSales, Sale } from './saleRepository';
-
-export default function SaleListScreen() {
-  const [sales, setSales] = useState<Sale[]>([]);
-  const [searchQuery, setSearchQuery] = useState('');
-
-  useEffect(() => {
-    loadSales();
-  }, []);
-
-  const loadSales = () => {
     const list = getAllSales();
     setSales(list);
   };
@@ -53,14 +41,6 @@ export default function SaleListScreen() {
           onChangeText={setSearchQuery}
         />
       </View>
-      <FlatList
-        data={filteredSales}
-        renderItem={renderSale}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={styles.list}
-        ListEmptyComponent={<Text style={styles.empty}>No sales found</Text>}
-      />
-    </View>
   );
 }
 
@@ -127,9 +107,3 @@ const styles = StyleSheet.create({
     fontSize: Typography.xs,
     color: Colors.light.textMuted,
   },
-  empty: {
-    textAlign: 'center',
-    color: Colors.light.textMuted,
-    marginTop: Spacing.xl,
-  },
-});
